@@ -1,0 +1,9 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "models\ugc\76561197995159516\mickyan\weapons\shell_hd"
+	"$envmap" "env_cubemap"	
+//	"$envmapcontrast" 1
+	"$basealphaenvmapmask" 1	
+	"$envmaptint" "[ .6 .5 .3]"
+	"$model" 1
+}
