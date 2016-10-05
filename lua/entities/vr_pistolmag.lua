@@ -23,7 +23,8 @@ function ENT:SpawnFunction( ply, tr, ClassName )
 end
 
 function ENT:SetupDataTables()
-	self:NetworkVar( "Int" , 0 , "Bullets" )
+	BaseClass.SetupDataTables( self )
+	self:DefineNWVar( "Int" , "Bullets" )
 end
 
 function ENT:Initialize()

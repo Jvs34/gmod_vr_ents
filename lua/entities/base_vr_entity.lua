@@ -96,6 +96,24 @@ function ENT:Initialize()
 
 end
 
+function ENT:HandleInput()
+	--TEMPORARY AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
+	if IsValid( self:GetPlayerOwner() ) then
+
+		local flag = 0
+		
+		if self:GetPlayerOwner():KeyDown( IN_ATTACK ) then
+			flag = bit.bor( flag , IN_ATTACK )
+		end
+
+		if self:GetPlayerOwner():KeyDown( IN_RELOAD ) then
+			flag = bit.bor( flag , IN_RELOAD )
+		end
+		
+		self:SetButtonsInput( flag )
+	end
+	
+end
 
 function ENT:Think()
 	
@@ -103,6 +121,10 @@ function ENT:Think()
 		self:HandlePrediction()
 	end
 	
+	--TEMPORARY TEMPORARY TEMPORARY TEMPORARY
+	if SERVER then
+		self:HandleInput()
+	end
 	
 	self:NextThink( CurTime() + engine.TickInterval() )
 	return true

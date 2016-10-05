@@ -37,6 +37,7 @@ function EFFECT:Render()
 	
 	local startpos = self:GetEndPos() - self:GetDirection() * ( fDelta - sinWave * self.Length )
 	local endpos = self:GetEndPos() - self:GetDirection() * ( fDelta + sinWave * self.Length )
-	render.DrawBeam( startpos , endpos , 2 + sinWave * 16 , 1 , 0 , color_white )
+	
+	render.DrawBeam( startpos , endpos , 2 , 1 , 0 , color_white )
 
 end

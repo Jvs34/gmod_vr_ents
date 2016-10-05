@@ -2,29 +2,44 @@ AddCSLuaFile()
 
 DEFINE_BASECLASS( "base_vr_entity" )
 
-
-
 function ENT:SetupDataTables()
 	
 	BaseClass.SetupDataTables( self )
 	
+	self:DefineNWVar( "Entity" , "Magazine" )
 	
 	
+	self:DefineNWVar( "Float" , "FireRate" )
+	
+	self:DefineNWVar( "Bool" , "HasMagazine" ) --if this weapon uses a magazine
 	self:DefineNWVar( "Bool" , "TriggerHeld" ) --if the trigger is being pulled currently
 	self:DefineNWVar( "Bool" , "WasTriggerHeld" ) --if the trigger was pulled last frame
+	self:DefineNWVar( "Bool" , "BulletChambered" ) --this is checked before firing
 	
-	self:DefineNWVar( "Vector" , "AccuracyVector" ) --used for the LerpVector, good accuracy, VECTOR_CONE_1DEGREES
+	self:DefineNWVar( "Bool" , "AutomaticFireMode" ) --if we're singleshot or automatic
+		
+	self:DefineNWVar( "Vector" , "WeaponSpread" )
 
 end
 
 function ENT:WeaponThink()
+	local buttons = self:GetButtonsInput()
+	
+	if bit.band( buttons , IN_RELOAD ) ~= 0 and self:GetHasMagazine() then
+		self:DropMagazine()
+	end
+	
 	self:AutoRechamber()
 
 	local triggerheld = self:GetAnalogTrigger() >= 0.5
 	local wastriggerheld = self:GetTriggerHeld()
 
-	if triggerheld and not wastriggerheld then
-		self:WeaponFire()
+	if ( triggerheld and not wastriggerheld ) or ( triggerheld and self:GetAutomaticFireMode() ) then
+		
+		if self:GetNextFire() < CurTime() then
+			self:WeaponFire()
+		end
+		
 	end
 
 	self:SetWasTriggerHeld( wastriggerheld )
@@ -32,40 +47,78 @@ function ENT:WeaponThink()
 
 end
 
+function ENT:HandleInput()
+	BaseClass.HandleInput( self )
+	
+	if bit.band( self:GetButtonsInput() , IN_ATTACK ) ~= 0 then	
+		self:SetAnalogTrigger( 1 )
+	else
+		self:SetAnalogTrigger( 0 )
+	end
+	
+end
+
 function ENT:Think()
+	local ret = BaseClass.Think( self )
+	
 	if SERVER then
-		--TEMPORARY AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
-		--a vr player would have this set from the actual analog trigger
-		if IsValid( self:GetPlayerOwner() ) then
-
-			local flag = 0
-
-			if self:GetPlayerOwner():KeyDown( IN_SPEED ) then
-				flag = IN_ATTACK
-				self:SetAnalogTrigger( 1 )
-			else
-				self:SetAnalogTrigger( 0 )
-			end
-
-
-			self:SetButtonsInput( flag )
-		end
-
 		self:WeaponThink()
 	end
 
-	return BaseClass.Think( self )
+	return ret
 end
 
 function ENT:WeaponFire()
-	if self:GetNextFire() > CurTime() then
-		return
-	end
-
 	self:WeaponFireBullet()
 	self:SetNextFire( CurTime() + self:GetFireRate() )
 end
 
 function ENT:WeaponFireBullet()
 
+end
+
+--OVERRIDE ME
+function ENT:GetBulletPosAng()
+	return self:GetPos() , self:GetAngles()
+end
+
+--OVERRIDE ME
+function ENT:GetMuzzlePosAng()
+	return vector_origin , angle_zero
+end
+
+--OVERRIDE ME
+function ENT:GetMagazinePosAng()
+	return self:GetPos() , self:GetAngles()
+end
+
+function ENT:DrawSpread()
+
+end
+
+if SERVER then
+	
+	function ENT:CreateMagazine()
+		self:DropMagazine()
+		local mag = ents.Create( self:GetClass() .. "mag" )
+		if IsValid( mag ) then
+			local pos , ang = self:GetMagazinePosAng()
+			mag:SetPos( pos )
+			mag:SetAngles( ang )
+
+			mag:SetParent( self )
+			mag:Spawn()
+			mag:DestroyPhysics()
+
+			self:SetMagazine( mag )
+		end
+	end
+
+	function ENT:DropMagazine()
+		if IsValid( self:GetMagazine() ) then
+			self:GetMagazine():SetParent( NULL )
+			self:GetMagazine():InitializePhysics()
+			self:SetMagazine( NULL )
+		end
+	end
 end

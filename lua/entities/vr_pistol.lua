@@ -31,12 +31,6 @@ end
 function ENT:SetupDataTables()
 	BaseClass.SetupDataTables( self )
 	
-	self:DefineNWVar( "Entity" , "Magazine" )
-	
-	self:DefineNWVar( "Bool" , "HasMagazine" ) --if there's a magazine currently
-	self:DefineNWVar( "Bool" , "BulletChambered" ) --this is checked before firing
-
-	self:DefineNWVar( "Float" , "FireRate" )
 	self:DefineNWVar( "Float" , "RechamberStartTime" )
 	self:DefineNWVar( "Float" , "RechamberTime" )
 
@@ -47,15 +41,14 @@ function ENT:Initialize()
 	if SERVER then
 		self:SetModel( "models/ugc/76561197995159516/mickyan/w_hdpistol.mdl" )
 
-		self:SetAccuracyVector( Vector( 0.00873, 0.00873, 00873 ) )
+		self:SetWeaponSpread( Vector( 0.00873, 0.00873, 00873 ) )
 		--considering the spread from a VR perpheral is actually from the hands
 		--don't actually increase the spread for now
-
+		self:SetHasMagazine( true )
 		self:CreateMagazine()
 		self:SetMagazineBullets( 18 )
 		self:SetFireRate( 0.1 )
-
-
+		
 		self:LoadBullet()
 	else
 		self:AddCallback( "BuildBonePositions" , function( self , nbones )
@@ -195,7 +188,7 @@ function ENT:WeaponFireBullet()
 		Src = bulletpos,
 		Dir = bulletdir:Forward(),
 		Attacker = self,
-		Spread = self:GetAccuracyVector(),
+		Spread = self:GetWeaponSpread(),
 		HullSize = 0,
 		Callback = nil,
 		Force = 20,
@@ -252,29 +245,6 @@ end
 
 if SERVER then
 
-	function ENT:CreateMagazine()
-		self:DropMagazine()
-		local mag = ents.Create( self:GetClass() .. "mag" )
-		if IsValid( mag ) then
-			local pos , ang = self:GetMagazinePosAng()
-			mag:SetPos( pos )
-			mag:SetAngles( ang )
-
-			mag:SetParent( self )
-			mag:Spawn()
-			mag:DestroyPhysics()
-
-			self:SetMagazine( mag )
-		end
-	end
-
-	function ENT:DropMagazine()
-		if IsValid( self:GetMagazine() ) then
-			self:GetMagazine():SetParent( NULL )
-			self:GetMagazine():InitializePhysics()
-			self:SetMagazine( NULL )
-		end
-	end
 else
 	function ENT:BuildAnimationBones( nbones )
 		local gripbonematrix = self:GetBoneMatrix( self.GripBone )
