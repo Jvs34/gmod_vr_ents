@@ -9,6 +9,9 @@ ENT.PrintName = "VR Pistol"
 ENT.CollisionsMin = Vector( -2.488817 , -0.721349 , -3.411153 )
 ENT.CollisionsMax = Vector( 8.174237 , 0.719209 , 3.067022 )
 
+ENT.HullMin = Vector( -8 , -8 , -8 )
+ENT.HullMax = Vector( 8 , 8 , 8 )
+
 ENT.MagazineOffset = {
 	Pos = Vector( 0 , 0 , 0 ),
 	Ang = Angle( 0 , 0 , 0 ),
@@ -40,11 +43,12 @@ function ENT:Initialize()
 
 	if SERVER then
 		self:SetModel( "models/ugc/76561197995159516/mickyan/w_hdpistol.mdl" )
-
+		self:SetCurrentOffsetAngle( Angle( -2.5 , 0 , 0 ) )
+		self:SetCurrentOffsetPos( Vector( -2 , 0 , 7 ) )
 		self:SetWeaponSpread( Vector( 0.00873, 0.00873, 00873 ) )
 		--considering the spread from a VR perpheral is actually from the hands
 		--don't actually increase the spread for now
-		self:SetHasMagazine( true )
+		self:SetUsesMagazines( true )
 		self:CreateMagazine()
 		self:SetMagazineBullets( 18 )
 		self:SetFireRate( 0.1 )
@@ -81,7 +85,7 @@ function ENT:InitializePhysics()
 		end
 	end
 
-	self:SetCollisionBounds( self.CollisionsMin , self.CollisionsMax )
+	self:SetCollisionBounds( self.HullMin , self.HullMax )
 end
 
 function ENT:DestroyPhysics()
@@ -294,7 +298,12 @@ else
 		else
 			self:SetSubMaterial( 1 , nil )
 		end
-
+		
+		--[[
+		local bbmin , bbmax = self:GetCollisionBounds()
+		render.DrawWireframeBox( self:GetPos() , angle_zero , bbmin , bbmax , color_white )
+		]]
+		
 		--debug code to test where the bullet will go
 		--[[
 		local bulletpos , bulletang = self:GetBulletPosAng()

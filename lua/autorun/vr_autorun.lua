@@ -2,6 +2,20 @@ AddCSLuaFile()
 
 --TODO
 
+--TEMPORARY AGAIN
+hook.Add( "SetupMove" , "VRInput" , function( ply , mv , cumd )
+	local slot1 = "fake_vivecontroller_left"
+	local slot2 = "fake_vivecontroller_right"
+	
+	if IsValid( ply:GetNW2Entity( slot1 ) ) then
+		ply:GetNW2Entity( slot1 ):HandleInput( mv )
+	end
+	
+	if IsValid( ply:GetNW2Entity( slot2 ) ) then
+		ply:GetNW2Entity( slot2 ):HandleInput( mv )
+	end
+	
+end)
 
 --TEMPORARY TEMPORARY TEMPORARY TEMPORARY TEMPORARY TEMPORARY TEMPORARY TEMPORARY
 --this comes from PAC3, I ripped it because I really can't be arsed to compile the vive models into source

@@ -46,6 +46,9 @@ function ENT:SetupDataTables()
 	self:DefineNWVar( "Float" , "NextFire" )
 	
 	self:DefineNWVar( "Vector" , "AnalogInput" ) --the analog stick ( pad in case of vive )
+	
+	self:DefineNWVar( "Vector" , "CurrentOffsetPos" )
+	self:DefineNWVar( "Angle" , "CurrentOffsetAngle" )
 end
 
 function ENT:DefineNWVar( dttype , dtname , editable , beautifulname , minval , maxval , customelement , filt )
@@ -98,20 +101,34 @@ end
 
 function ENT:HandleInput()
 	--TEMPORARY AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
-	if IsValid( self:GetPlayerOwner() ) then
-
-		local flag = 0
-		
-		if self:GetPlayerOwner():KeyDown( IN_ATTACK ) then
-			flag = bit.bor( flag , IN_ATTACK )
-		end
-
-		if self:GetPlayerOwner():KeyDown( IN_RELOAD ) then
-			flag = bit.bor( flag , IN_RELOAD )
-		end
-		
-		self:SetButtonsInput( flag )
+	local attachedto = self:GetAttachedTo()
+	
+	if IsValid( attachedto ) then
+		self:SetButtonsInput( attachedto:GetButtonsInput() )
+		self:SetAnalogTrigger( attachedto:GetAnalogTrigger() )
+		self:SetAnalogInput( attachedto:GetAnalogInput() )
 	end
+	
+end
+
+function ENT:GetOffsetPosAng()
+	if IsValid( self:GetAttachedTo() ) then
+		return LocalToWorld( self:GetCurrentOffsetPos() , self:GetCurrentOffsetAngle() , self:GetAttachedTo():GetPos() , self:GetAttachedTo():GetAngles() )
+	end
+end
+
+function ENT:CalcAbsolutePosition( pos , ang )
+	return self:GetOffsetPosAng()
+end
+
+function ENT:EquipTo( ply , controller )
+	
+	self:DestroyPhysics()
+	self:SetOwner( ply )
+	controller:SetHoldingEntity( self )
+	self:SetParent( controller )
+	self:SetPlayerOwner( ply )
+	self:SetAttachedTo( controller )
 	
 end
 
@@ -123,15 +140,22 @@ function ENT:Think()
 	
 	--TEMPORARY TEMPORARY TEMPORARY TEMPORARY
 	if SERVER then
-		self:HandleInput()
+		--self:HandleInput()
 	end
 	
 	self:NextThink( CurTime() + engine.TickInterval() )
 	return true
 end
 
+function ENT:InitializePhysics()
+end
+
+function ENT:DestroyPhysics()
+
+end
+
 if SERVER then
-	
+
 else
 	function ENT:HandlePrediction()
 	

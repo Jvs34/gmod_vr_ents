@@ -2021,13 +2021,16 @@ end
 --we don't really care
 function ENT:SetupDataTables()
 	self:NetworkVar( "Bool" , 0 , "IsLeft" )
-	self:NetworkVar( "Vector" , 0 , "CurrentOffsetPos" )
+	
 	self:NetworkVar( "Vector" , 1 , "AnalogInput" )
 	
-	self:NetworkVar( "Angle" , 0 , "CurrentoffsetAngle" )
+	self:NetworkVar( "Vector" , 0 , "CurrentOffsetPos" )
+	self:NetworkVar( "Angle" , 0 , "CurrentOffsetAngle" )
 	
 	self:NetworkVar( "Float" , 0 , "AnalogTrigger" )
 	
+	
+	self:NetworkVar( "Entity" , 0 , "HoldingEntity" )
 	
 	self:NetworkVar( "Int" ,  0 , "ButtonsInput" )
 end
@@ -2040,7 +2043,6 @@ function ENT:Initialize()
 		
 		if str then
 			self.ViveControllerMesh = CreateModelFromObjData( str )
-			print( self.ViveControllerMesh )
 		end
 		
 	end
@@ -2049,14 +2051,48 @@ function ENT:Initialize()
 end
 
 function ENT:Think()
+	
 	if CLIENT then
 		self:HandlePrediction()
 	end
 end
 
+function ENT:HandleInput( mv )
+	if CLIENT and not self:GetPredictable() then
+		return
+	end
+	
+	local ply = self:GetOwner()
+	
+	if IsValid( ply ) then
+
+		local flag = 0
+		
+		if mv:KeyDown( IN_ATTACK ) then
+			flag = bit.bor( flag , IN_ATTACK )
+		end
+
+		if mv:KeyDown( IN_RELOAD ) then
+			flag = bit.bor( flag , IN_RELOAD )
+		end
+		
+		self:SetButtonsInput( flag )
+		
+		if bit.band( self:GetButtonsInput() , IN_ATTACK ) ~= 0 then	
+			self:SetAnalogTrigger( 1 )
+		else
+			self:SetAnalogTrigger( 0 )
+		end
+	end
+	
+	if IsValid( self:GetHoldingEntity() ) then
+		self:GetHoldingEntity():HandleInput()
+	end
+end
+
 function ENT:GetOffsetPosAng()
 	if IsValid( self:GetOwner() ) then
-		return LocalToWorld( self:GetCurrentOffsetPos() , self:GetCurrentoffsetAngle() , self:GetOwner():EyePos() , self:GetOwner():EyeAngles() )
+		return LocalToWorld( self:GetCurrentOffsetPos() , self:GetCurrentOffsetAngle() , self:GetOwner():EyePos() , self:GetOwner():EyeAngles() )
 	end
 end
 

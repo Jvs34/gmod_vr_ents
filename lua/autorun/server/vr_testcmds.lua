@@ -25,6 +25,10 @@ concommand.Add( "vr_createfake" , function( ply , cmd , args , fullstr )
 		vive_left:SetCurrentOffsetPos( Vector( 30 , distancefromeye , -10 ) )
 		vive_left:Spawn()
 		ply:SetNW2Entity( slot1 , vive_left )
+		
+		local pistol = ents.Create( "vr_pistol" )
+		pistol:Spawn()
+		pistol:EquipTo( ply , vive_left )
 	end
 	
 	local vive_right = ents.Create( "fake_vive_controller" )
@@ -35,6 +39,10 @@ concommand.Add( "vr_createfake" , function( ply , cmd , args , fullstr )
 		vive_right:SetCurrentOffsetPos( Vector( 30 , distancefromeye * -1 , -10 ) )
 		vive_right:Spawn()
 		ply:SetNW2Entity( slot2 , vive_right )
+		
+		local pistol = ents.Create( "vr_pistol" )
+		pistol:Spawn()
+		pistol:EquipTo( ply , vive_right )
 	end
 	
 end)

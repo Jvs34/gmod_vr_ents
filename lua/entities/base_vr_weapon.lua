@@ -11,7 +11,7 @@ function ENT:SetupDataTables()
 	
 	self:DefineNWVar( "Float" , "FireRate" )
 	
-	self:DefineNWVar( "Bool" , "HasMagazine" ) --if this weapon uses a magazine
+	self:DefineNWVar( "Bool" , "UsesMagazines" ) --if this weapon uses a magazine
 	self:DefineNWVar( "Bool" , "TriggerHeld" ) --if the trigger is being pulled currently
 	self:DefineNWVar( "Bool" , "WasTriggerHeld" ) --if the trigger was pulled last frame
 	self:DefineNWVar( "Bool" , "BulletChambered" ) --this is checked before firing
@@ -25,7 +25,7 @@ end
 function ENT:WeaponThink()
 	local buttons = self:GetButtonsInput()
 	
-	if bit.band( buttons , IN_RELOAD ) ~= 0 and self:GetHasMagazine() then
+	if bit.band( buttons , IN_RELOAD ) ~= 0 and self:GetUsesMagazines() then
 		self:DropMagazine()
 	end
 	
@@ -50,11 +50,6 @@ end
 function ENT:HandleInput()
 	BaseClass.HandleInput( self )
 	
-	if bit.band( self:GetButtonsInput() , IN_ATTACK ) ~= 0 then	
-		self:SetAnalogTrigger( 1 )
-	else
-		self:SetAnalogTrigger( 0 )
-	end
 	
 end
 
