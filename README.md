@@ -4,67 +4,71 @@ Entities that can be interacted with vr controllers
 
 #Entities
 
--Base
+Base
 
-	TODO
+	WIP
 
--Pistol
+Weapon Base
+
+	WIP
+
+Pistol
 
 	WIP
 	
 	http://steamcommunity.com/sharedfiles/filedetails/?id=184837513
 	model created by https://facepunch.com/member.php?u=145898 / http://steamcommunity.com/profiles/76561197995159516
 
--SMG1
+SMG1
 
 	TODO
 	seeking for model
 	
--Frag Grenade
+Frag Grenade
 
 	TODO
 	uses 2 models already built in, should be good enough
 	
--Crowbar
+Crowbar
 
 	TODO
 	seeking for high quality model(?)
 
--AR2
+AR2
 
 	TODO
 	seeking for model
 	
--.357 colt python
+.357 colt python
 
 	TODO
 	
 	http://steamcommunity.com/sharedfiles/filedetails/?id=137591571
 	model created by https://facepunch.com/member.php?u=145898 / http://steamcommunity.com/profiles/76561197995159516
 
--Crossbow
+Crossbow
 
 	TODO
 	seeking for model
 	
--Crossbow-like bow
+Crossbow-like bow
 
 	TODO
 	
 	http://steamcommunity.com/sharedfiles/filedetails/?id=154179577
 	model created by https://facepunch.com/member.php?u=145898 / http://steamcommunity.com/profiles/76561197995159516
 
--Physics gun
+Physics gun
 
 	TODO
 	seeking for model
 
--Gravity gun
+Gravity gun
 
 	TODO
 	seeking for model
 
--Tool gun
+Tool gun
 
 	TODO
 	seeking for model(?), worldmodel should be high quality enough to use I think
