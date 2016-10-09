@@ -2090,6 +2090,12 @@ function ENT:HandleInput( mv )
 	end
 end
 
+function ENT:HandleSimulate( mv )
+	if IsValid( self:GetHoldingEntity() ) then
+		self:GetHoldingEntity():Simulate( mv )
+	end
+end
+
 function ENT:GetOffsetPosAng()
 	if IsValid( self:GetOwner() ) then
 		return LocalToWorld( self:GetCurrentOffsetPos() , self:GetCurrentOffsetAngle() , self:GetOwner():EyePos() , self:GetOwner():EyeAngles() )

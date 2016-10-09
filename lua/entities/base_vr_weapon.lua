@@ -53,14 +53,8 @@ function ENT:HandleInput()
 	
 end
 
-function ENT:Think()
-	local ret = BaseClass.Think( self )
-	
-	if SERVER then
-		self:WeaponThink()
-	end
-
-	return ret
+function ENT:Simulate( mv )
+	self:WeaponThink( mv )
 end
 
 function ENT:WeaponFire()

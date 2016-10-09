@@ -44,7 +44,7 @@ function ENT:Initialize()
 	if SERVER then
 		self:SetModel( "models/ugc/76561197995159516/mickyan/w_hdpistol.mdl" )
 		self:SetCurrentOffsetAngle( Angle( -2.5 , 0 , 0 ) )
-		self:SetCurrentOffsetPos( Vector( -2 , 0 , 7 ) )
+		self:SetCurrentOffsetPos( Vector( 0 , 0 , 7 ) )
 		self:SetWeaponSpread( Vector( 0.00873, 0.00873, 00873 ) )
 		--considering the spread from a VR perpheral is actually from the hands
 		--don't actually increase the spread for now

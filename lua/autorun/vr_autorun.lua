@@ -9,10 +9,12 @@ hook.Add( "SetupMove" , "VRInput" , function( ply , mv , cumd )
 	
 	if IsValid( ply:GetNW2Entity( slot1 ) ) then
 		ply:GetNW2Entity( slot1 ):HandleInput( mv )
+		ply:GetNW2Entity( slot1 ):HandleSimulate( mv )
 	end
 	
 	if IsValid( ply:GetNW2Entity( slot2 ) ) then
 		ply:GetNW2Entity( slot2 ):HandleInput( mv )
+		ply:GetNW2Entity( slot2 ):HandleSimulate( mv )
 	end
 	
 end)

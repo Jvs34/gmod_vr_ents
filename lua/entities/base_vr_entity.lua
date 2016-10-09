@@ -132,15 +132,22 @@ function ENT:EquipTo( ply , controller )
 	
 end
 
+function ENT:IsHeld()
+	return IsValid( self:GetOwner() ) and IsValid( self:GetAttachedTo() ) and IsValid( self:GetParent() )
+end
+
+function ENT:Simulate( mv )
+	
+end
+
 function ENT:Think()
 	
 	if CLIENT then
 		self:HandlePrediction()
 	end
 	
-	--TEMPORARY TEMPORARY TEMPORARY TEMPORARY
-	if SERVER then
-		--self:HandleInput()
+	if not self:IsHeld() then
+		self:Simulate()
 	end
 	
 	self:NextThink( CurTime() + engine.TickInterval() )
