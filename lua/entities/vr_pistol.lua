@@ -195,7 +195,7 @@ function ENT:WeaponFireBullet()
 		Spread = self:GetWeaponSpread(),
 		HullSize = 0,
 		Callback = nil,
-		Force = 20,
+		Force = 5,
 		Distance = 56756,
 		Tracer = 1,
 		TracerName = "luatracer",
