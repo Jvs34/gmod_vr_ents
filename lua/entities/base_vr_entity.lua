@@ -184,13 +184,16 @@ end
 if SERVER then
 
 else
+	function ENT:ShouldPredict()
+		return IsValid( self:GetPlayerOwner() ) and self:GetPlayerOwner() == LocalPlayer()
+	end
+	
 	function ENT:HandlePrediction()
 		if game.SinglePlayer() then
 			return
 		end
 		
-		if IsValid( self:GetPlayerOwner() ) and self:GetPlayerOwner() == LocalPlayer() then
-			
+		if self:ShouldPredict() then
 			if not self:GetPredictable() then
 				self:SetPredictable( true )
 			end

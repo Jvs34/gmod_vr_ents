@@ -106,6 +106,7 @@ function ENT:DropMagazine()
 	end
 	
 	if IsValid( self:GetMagazine() ) then
+		self:GetMagazine():SetOwner( NULL )
 		self:GetMagazine():SetParent( NULL )
 		self:GetMagazine():InitializePhysics()
 		self:SetMagazine( NULL )
@@ -121,8 +122,8 @@ if SERVER then
 			local pos , ang = self:GetMagazinePosAng()
 			mag:SetPos( pos )
 			mag:SetAngles( ang )
-
 			mag:SetParent( self )
+			mag:SetOwner( self )
 			mag:Spawn()
 			mag:DestroyPhysics()
 

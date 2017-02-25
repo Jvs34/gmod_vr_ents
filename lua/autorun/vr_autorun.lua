@@ -7,12 +7,12 @@ hook.Add( "SetupMove" , "VRInput" , function( ply , mv , cumd )
 	local slot1 = "fake_vivecontroller_left"
 	local slot2 = "fake_vivecontroller_right"
 	
-	if IsValid( ply:GetNW2Entity( slot1 ) ) then
+	if IsValid( ply:GetNW2Entity( slot1 ) ) and ply:GetNW2Entity( slot1 ).HandleInput then
 		ply:GetNW2Entity( slot1 ):HandleInput( mv )
 		ply:GetNW2Entity( slot1 ):HandleSimulate( mv )
 	end
 	
-	if IsValid( ply:GetNW2Entity( slot2 ) ) then
+	if IsValid( ply:GetNW2Entity( slot2 ) ) and ply:GetNW2Entity( slot2 ).HandleInput then
 		ply:GetNW2Entity( slot2 ):HandleInput( mv )
 		ply:GetNW2Entity( slot2 ):HandleSimulate( mv )
 	end

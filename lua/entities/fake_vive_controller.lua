@@ -2133,10 +2133,12 @@ else
 			
 			if not self:GetPredictable() then
 				self:SetPredictable( true )
+				print( "Enabled prediction on " .. self:GetClass() )
 			end
 		else
 			if self:GetPredictable() then
 				self:SetPredictable( false )
+				print( "Disabled prediction on " .. self:GetClass() )
 			end
 		end
 	end

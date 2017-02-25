@@ -85,8 +85,26 @@ function ENT:CalcAbsolutePosition()
 	end
 end
 
-if CLIENT then
+--this will be moved to a main vr_magazine base entity later
+function ENT:IsHeld()
+	
+	if IsValid( self:GetOwner() ) then
+		return self:GetOwner():IsHeld()
+	end
+	
+	return BaseClass.IsHeld( self )
+end
 
+if CLIENT then
+	function ENT:ShouldPredict()
+		
+		if IsValid( self:GetOwner() ) then
+			return self:GetOwner():ShouldPredict()
+		end
+		
+		return BaseClass.IsHeld( self )
+	end
+	
 	function ENT:BuildAnimationBones( nbones )
 		for i = 0 , nbones - 1 do
 			local m = self:GetBoneMatrix( i )
