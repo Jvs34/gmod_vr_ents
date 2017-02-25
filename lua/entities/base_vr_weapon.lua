@@ -54,6 +54,10 @@ function ENT:HandleInput()
 end
 
 function ENT:Simulate( mv )
+	if CLIENT and not self:GetPredictable() then
+		return
+	end
+	
 	self:WeaponThink( mv )
 end
 
@@ -93,7 +97,20 @@ function ENT:GetMagazinePosAng()
 	return self:GetPos() , self:GetAngles()
 end
 
-
+function ENT:DropMagazine()
+	--ideally, we'll simply drop a cluaeffect as a fake magazine, and it'll disappear
+	--after a while
+	
+	if CLIENT then
+		return
+	end
+	
+	if IsValid( self:GetMagazine() ) then
+		self:GetMagazine():SetParent( NULL )
+		self:GetMagazine():InitializePhysics()
+		self:SetMagazine( NULL )
+	end
+end
 
 if SERVER then
 	
@@ -113,16 +130,25 @@ if SERVER then
 		end
 	end
 
-	function ENT:DropMagazine()
-		if IsValid( self:GetMagazine() ) then
-			self:GetMagazine():SetParent( NULL )
-			self:GetMagazine():InitializePhysics()
-			self:SetMagazine( NULL )
-		end
-	end
+
 else
 
 	function ENT:DrawSpread()
-	
+		--[[
+		local bbmin , bbmax = self:GetCollisionBounds()
+		render.DrawWireframeBox( self:GetPos() , angle_zero , bbmin , bbmax , color_white )
+		]]
+		
+		--debug code to test where the bullet will go
+		local bulletpos , bulletang = self:GetBulletPosAng()
+		
+		local startpos = bulletpos
+		
+		for i = 0 , 15 do
+			local endpos = bulletpos + VRShotManipulator( bulletang:Forward() , self:GetWeaponSpread() ) * 1024
+			
+			render.DrawLine( startpos , endpos , color_white , true )
+		end
+		
 	end
 end

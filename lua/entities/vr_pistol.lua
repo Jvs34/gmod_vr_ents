@@ -299,20 +299,7 @@ else
 			self:SetSubMaterial( 1 , nil )
 		end
 		
-		--[[
-		local bbmin , bbmax = self:GetCollisionBounds()
-		render.DrawWireframeBox( self:GetPos() , angle_zero , bbmin , bbmax , color_white )
-		]]
-		
-		--debug code to test where the bullet will go
-		--[[
-		local bulletpos , bulletang = self:GetBulletPosAng()
-
-		local startpos = bulletpos
-		local endpos = bulletpos + bulletang:Forward() * 1024
-
-		--render.DrawLine( startpos , endpos , color_white , true )
-		]]
+		self:DrawSpread()
 
 		self:DrawModel()
 	end

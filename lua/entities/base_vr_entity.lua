@@ -37,6 +37,13 @@ function ENT:SetupDataTables()
 	}
 	
 	--
+	--IN_USE is the sidegrip
+	--IN_MENU is the button above the touchpad
+	--IN_CANCEL is system button, I doubt it would be actually used as it triggers steam overlay
+	--IN_ATTACK is the trigger fully clicked ( with trigger == 1 as well, there may be defective controllers where this isn't true )
+	--IN_ATTACK2 is the touchpad click
+	
+	
 	self:DefineNWVar( "Int" , "ButtonsInput" )
 
 	self:DefineNWVar( "Entity" , "PlayerOwner" ) --the vr player owner
@@ -148,7 +155,9 @@ function ENT:IsHeld()
 end
 
 function ENT:Simulate( mv )
-	
+	if CLIENT and not self:GetPredictable() then
+		return
+	end
 end
 
 function ENT:Think()
@@ -176,6 +185,19 @@ if SERVER then
 
 else
 	function ENT:HandlePrediction()
-	
+		if game.SinglePlayer() then
+			return
+		end
+		
+		if IsValid( self:GetPlayerOwner() ) and self:GetPlayerOwner() == LocalPlayer() then
+			
+			if not self:GetPredictable() then
+				self:SetPredictable( true )
+			end
+		else
+			if self:GetPredictable() then
+				self:SetPredictable( false )
+			end
+		end
 	end
 end

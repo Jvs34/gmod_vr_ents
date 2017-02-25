@@ -8,6 +8,10 @@ ENT.PrintName = "Fake Vive Controller"
 	I can't currently setup my vive as I'm about to move out, so I'd rather create fake controllers instead	
 ]]
 if CLIENT then
+--this model was retrieved from the workshop item http://steamcommunity.com/sharedfiles/filedetails/?id=706398051
+--all credits go to the author, currently I'm using this to prototype and it's very handy as I don't have to
+--create a source engine model out of this yet
+
 ENT.ViveObj = [[# Blender v2.77 (sub 0) OBJ File: 'vr_controller_lowpoly.blend'
 # www.blender.org
 mtllib vr_controller_lowpoly.mtl
@@ -2068,7 +2072,7 @@ function ENT:HandleInput( mv )
 
 		local flag = 0
 		
-		if mv:KeyDown( IN_ATTACK ) then
+		if ( self:GetIsLeft() and mv:KeyDown( IN_ATTACK ) ) or ( not self:GetIsLeft() and mv:KeyDown( IN_ATTACK2 ) ) then
 			flag = bit.bor( flag , IN_ATTACK )
 		end
 
@@ -2078,6 +2082,7 @@ function ENT:HandleInput( mv )
 		
 		self:SetButtonsInput( flag )
 		
+		--ideally stuff should check for the trigger first, buttons input second
 		if bit.band( self:GetButtonsInput() , IN_ATTACK ) ~= 0 then	
 			self:SetAnalogTrigger( 1 )
 		else

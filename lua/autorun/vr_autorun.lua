@@ -19,6 +19,29 @@ hook.Add( "SetupMove" , "VRInput" , function( ply , mv , cumd )
 	
 end)
 
+function VRShotManipulator( direction , spread , seed )
+	local vecresult
+	local vecup = direction:Angle():Up()
+	local vecright = direction:Angle():Right()
+	
+	local x , y , z = 0 , 0 , 0
+	local flatness = 0.5
+
+	if seed then
+		math.randomseed( seed )
+	end
+	
+	repeat
+		x = ( math.random( -100 , 100 ) / 100 ) * flatness + ( math.random( -100 , 100 ) / 100 ) * ( 1 - flatness )
+		y = ( math.random( -100 , 100 ) / 100 ) * flatness + ( math.random( -100 , 100 ) / 100 ) * ( 1 - flatness )
+		z = x * x + y * y
+	until( z <= 1 )
+	
+	
+	vecresult = direction + x * spread.x * vecright + y * spread.y * vecup
+	return vecresult
+end
+
 --TEMPORARY TEMPORARY TEMPORARY TEMPORARY TEMPORARY TEMPORARY TEMPORARY TEMPORARY
 --this comes from PAC3, I ripped it because I really can't be arsed to compile the vive models into source
 --so I can just read the objects and draw them for the fake controllers
