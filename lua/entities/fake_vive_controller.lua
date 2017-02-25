@@ -2130,15 +2130,12 @@ else
 		end
 		
 		if IsValid( self:GetOwner() ) and self:GetOwner() == LocalPlayer() then
-			
 			if not self:GetPredictable() then
 				self:SetPredictable( true )
-				print( "Enabled prediction on " .. self:GetClass() )
 			end
 		else
 			if self:GetPredictable() then
 				self:SetPredictable( false )
-				print( "Disabled prediction on " .. self:GetClass() )
 			end
 		end
 	end
