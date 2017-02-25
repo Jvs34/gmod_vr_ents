@@ -210,8 +210,11 @@ function ENT:WeaponFireBullet()
 	local effectdata = EffectData()
 	effectdata:SetOrigin( bulletpos )
 	effectdata:SetAngles( bulletdir )
-	util.Effect( "ShellEject", effectdata )
-
+	
+	if IsFirstTimePredicted() then
+		util.Effect( "ShellEject", effectdata )
+	end
+	
 	if SERVER then
 		effectdata:SetEntIndex( self:EntIndex() )
 	else
@@ -221,8 +224,10 @@ function ENT:WeaponFireBullet()
 	effectdata:SetOrigin( mpos )
 	effectdata:SetAngles( mang )
 	effectdata:SetScale( self:GetModelScale() )
-	util.Effect( "luamuzzleflash", effectdata )
-
+	
+	if IsFirstTimePredicted() then
+		util.Effect( "luamuzzleflash", effectdata )
+	end
 
 
 	self:EmitSound( "Weapon_Pistol.Single" )
