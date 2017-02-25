@@ -2077,7 +2077,7 @@ function ENT:HandleInput( mv )
 		end
 
 		if mv:KeyDown( IN_RELOAD ) then
-			flag = bit.bor( flag , IN_RELOAD )
+			flag = bit.bor( flag , IN_ATTACK2 )
 		end
 		
 		self:SetButtonsInput( flag )

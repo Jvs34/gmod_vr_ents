@@ -25,7 +25,7 @@ end
 function ENT:WeaponThink()
 	local buttons = self:GetButtonsInput()
 	
-	if bit.band( buttons , IN_RELOAD ) ~= 0 and self:GetUsesMagazines() then
+	if bit.band( buttons , IN_ATTACK2 ) ~= 0 and self:GetUsesMagazines() then
 		self:DropMagazine()
 	end
 	
