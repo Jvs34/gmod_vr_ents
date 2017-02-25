@@ -58,7 +58,19 @@ function ENT:Simulate( mv )
 end
 
 function ENT:WeaponFire()
+	local shouldlagcompensate = IsValid( self:GetOwner() )
+	
+	if shouldlagcompensate then
+		self:GetOwner():LagCompensation( true )
+	end
+	
 	self:WeaponFireBullet()
+	
+	if shouldlagcompensate then
+		self:GetOwner():LagCompensation( false )
+	end
+	
+	
 	self:SetNextFire( CurTime() + self:GetFireRate() )
 end
 
@@ -81,9 +93,7 @@ function ENT:GetMagazinePosAng()
 	return self:GetPos() , self:GetAngles()
 end
 
-function ENT:DrawSpread()
 
-end
 
 if SERVER then
 	
@@ -109,5 +119,10 @@ if SERVER then
 			self:GetMagazine():InitializePhysics()
 			self:SetMagazine( NULL )
 		end
+	end
+else
+
+	function ENT:DrawSpread()
+	
 	end
 end

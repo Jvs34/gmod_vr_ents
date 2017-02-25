@@ -2106,6 +2106,14 @@ function ENT:CalcAbsolutePosition( pos , ang )
 	return self:GetOffsetPosAng()
 end
 
+function ENT:OnRemove()
+	if SERVER then
+		if IsValid( self:GetHoldingEntity() ) then
+			self:GetHoldingEntity():Drop()
+		end
+	end
+end
+
 if SERVER then
 	
 	

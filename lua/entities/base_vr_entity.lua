@@ -122,14 +122,25 @@ function ENT:CalcAbsolutePosition( pos , ang )
 end
 
 function ENT:EquipTo( ply , controller )
-	
 	self:DestroyPhysics()
 	self:SetOwner( ply )
 	controller:SetHoldingEntity( self )
 	self:SetParent( controller )
 	self:SetPlayerOwner( ply )
-	self:SetAttachedTo( controller )
+	self:SetAttachedTo( controller )	
+end
+
+function ENT:Drop()
 	
+	if IsValid( self:GetAttachedTo() ) then
+		self:GetAttachedTo():SetHoldingEntity( NULL )
+	end
+	
+	self:SetParent( NULL )
+	self:SetPlayerOwner( NULL )
+	self:SetOwner( NULL )
+	
+	self:InitializePhysics()
 end
 
 function ENT:IsHeld()
