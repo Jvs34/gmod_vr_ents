@@ -88,7 +88,7 @@ end
 --this will be moved to a main vr_magazine base entity later
 function ENT:IsHeld()
 	
-	if IsValid( self:GetOwner() ) then
+	if IsValid( self:GetOwner() ) and IsValid( self:GetParent() ) and self:GetOwner() == self:GetParent() then
 		return self:GetOwner():IsHeld()
 	end
 	
@@ -98,7 +98,8 @@ end
 if CLIENT then
 	function ENT:ShouldPredict()
 		
-		if IsValid( self:GetOwner() ) then
+		--this could be way better
+		if IsValid( self:GetOwner() ) and IsValid( self:GetParent() ) and self:GetOwner() == self:GetParent() then
 			return self:GetOwner():ShouldPredict()
 		end
 		
